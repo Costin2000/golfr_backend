@@ -29,6 +29,24 @@ module Api
       end
     end
 
+    def index
+      user = User.find_by(id: params[:id])
+
+      if user.blank?
+        render json: {
+          errors: [
+            'Not user found with that id'
+          ], status: :bad_request
+        }
+        return
+      end
+
+      render json: {
+        id: user.id,
+        scores: user.scores
+      }
+    end
+
     def destroy
       @score.destroy!
 
