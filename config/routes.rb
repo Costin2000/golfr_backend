@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api do
     post 'login', to: 'users#login'
     get 'feed', to: 'scores#user_feed'
-    resources :scores, only: %i[create destroy]
+    get 'users/:id', to: 'users#get_name_by_id'
+    get 'users/:id/scores', to: 'users#get_scores_by_id'
   end
 end
