@@ -1,7 +1,7 @@
 module Api
   # Controller that handles authorization and user data fetching
   class UsersController < ApplicationController
-    before_action :logged_in!, only: [:get_name_by_id, :get_scores_by_id]
+    before_action :logged_in!, only: %i[find_name_by_id find_scores_by_id]
     include Devise::Controllers::Helpers
 
     def login
@@ -28,7 +28,7 @@ module Api
       }.to_json
     end
 
-    def get_name_by_id
+    def find_name_by_id
       user = User.find_by(id: params[:id])
 
       if user.blank?
@@ -46,7 +46,7 @@ module Api
       }
     end
 
-    def get_scores_by_id
+    def find_scores_by_id
       user = User.find_by(id: params[:id])
 
       if user.blank?
@@ -63,6 +63,5 @@ module Api
         scores: user.scores
       }
     end
-
   end
 end
