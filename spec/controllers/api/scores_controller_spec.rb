@@ -42,8 +42,6 @@ describe Api::ScoresController, type: :request do
     end
   end
 
-
-
   describe 'POST create' do
     it 'should save and return the new score if valid parameters' do
       score_count = Score.count
