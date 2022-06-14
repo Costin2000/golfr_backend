@@ -1,6 +1,7 @@
 module Api
   # Controller that handles authorization and user data fetching
   class UsersController < ApplicationController
+    before_action :logged_in!, only: %i[show index]
     include Devise::Controllers::Helpers
 
     def login
@@ -25,6 +26,35 @@ module Api
           token: current_token
         }
       }.to_json
+    end
+
+    def index
+      users = User.all
+      serialized_users = users.map(&:serialize_user)
+
+      response = {
+        users: serialized_users,
+      }
+
+      render json: response.to_json
+    end
+
+    def show
+      user = User.find_by(id: params[:id])
+
+      if user.blank?
+        render json: {
+          errors: [
+            'Not user found with that id'
+          ], status: :bad_request
+        }
+        return
+      end
+
+      render json: {
+        id: user.id,
+        name: user.name
+      }
     end
   end
 end

@@ -29,6 +29,24 @@ module Api
       end
     end
 
+    def index
+      user = User.find_by(id: params[:user_id])
+
+      if user.blank?
+        render json: {
+          errors: [
+            'Not user found with that id'
+          ], status: :bad_request
+        }
+        return
+      end
+
+      render json: {
+        id: user.id,
+        scores: user.scores
+      }
+    end
+
     def destroy
       @score.destroy!
 
@@ -44,7 +62,7 @@ module Api
     end
 
     def validate_score_user_id
-      @score = Score.find(params[:id])
+      @score = Score.find(params[:user_id])
 
       return if @score.user_id == current_user.id
 
