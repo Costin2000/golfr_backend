@@ -5,7 +5,7 @@ module Api
     before_action :validate_score_user_id, only: :destroy
 
     def user_feed
-      scores = Score.all.limit(25).order(played_at: :desc, id: :desc)
+      scores = Score.includes(:user).limit(25).all.order(played_at: :desc, id: :desc)
       serialized_scores = scores.map(&:serialize)
 
       response = {
@@ -27,6 +27,24 @@ module Api
           errors: score.errors.messages
         }, status: :bad_request
       end
+    end
+
+    def index
+      user = User.find_by(id: params[:user_id])
+
+      if user.blank?
+        render json: {
+          errors: [
+            'Not user found with that id'
+          ], status: :bad_request
+        }
+        return
+      end
+
+      render json: {
+        id: user.id,
+        scores: user.scores
+      }
     end
 
     def destroy
