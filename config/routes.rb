@@ -6,7 +6,11 @@ Rails.application.routes.draw do
     get 'feed', to: 'scores#user_feed'
     get 'users', to: 'users#index'
     get 'users/:id', to: 'users#show'
-    get 'users/:id/scores', to: 'scores#index'
+
+    resources :users do
+     resources :scores, only: :index
+    end
+
     resources :scores, only: %i[create destroy]
   end
 end

@@ -30,7 +30,7 @@ module Api
     end
 
     def index
-      user = User.find_by(id: params[:id])
+      user = User.find_by(id: params[:user_id])
 
       if user.blank?
         render json: {
@@ -62,7 +62,7 @@ module Api
     end
 
     def validate_score_user_id
-      @score = Score.find(params[:id])
+      @score = Score.find(params[:user_id])
 
       return if @score.user_id == current_user.id
 
